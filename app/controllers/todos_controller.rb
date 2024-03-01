@@ -1,9 +1,15 @@
 class TodosController < ApplicationController
     before_action :set_todo, only: [:show, :update, :destroy]
+    before_action :authenticate_request
 
   def index
     todos = Todo.all
     render json: TodoBlueprint.render(todos, view: :normal), status: :ok
+  end
+
+  def my_todos
+    todos = @current_user.todos
+    render json: TodoBlueprint.render(todos, view: :normal, status: :ok)
   end
 
   def show
@@ -11,7 +17,7 @@ class TodosController < ApplicationController
   end
 
   def create
-    todo = Todo.new(todo_params)
+    todo = @current_user.todos.create(todo_params)
 
     if todo.save
       render json: TodoBlueprint.render(todo, view: :normal), status: :created
