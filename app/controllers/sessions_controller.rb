@@ -3,9 +3,9 @@ class SessionsController < ApplicationController
     user = User.find_by(username: params[:username])
     if user&.authenticate(params[:password])
       token = jwt_encode(user_id: user.id)
-      render json: {token: token}, status: :ok
+      render json: { token: }, status: :ok
     else
-      render json: {error: "Unauthorized"}, status: :unauthorized
+      render json: { error: 'Unauthorized' }, status: :unauthorized
     end
   end
 
@@ -16,4 +16,3 @@ class SessionsController < ApplicationController
     JWT.encode(payload, Rails.application.credentials.secret_key_base)
   end
 end
-

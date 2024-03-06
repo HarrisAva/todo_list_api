@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class TodosController < ApplicationController
-    before_action :set_todo, only: [:show, :update, :destroy]
-    before_action :authenticate_request
+  before_action :set_todo, only: %i[show update destroy]
+  before_action :authenticate_request
 
   def index
     todos = Todo.all
@@ -9,7 +11,7 @@ class TodosController < ApplicationController
 
   def my_todos
     todos = @current_user.todos
-    render json: TodoBlueprint.render(todos, view: :normal, status: :ok)
+    render json: TodoBlueprint.render(todos, view: :normal), status: :ok
   end
 
   def show
@@ -27,7 +29,6 @@ class TodosController < ApplicationController
   end
 
   def update
-
     if @todo.update(todo_params)
       render json: TodoBlueprint.render(@todo, view: :normal), status: :ok
     else
@@ -46,9 +47,10 @@ class TodosController < ApplicationController
   private
 
   def set_todo
-    @todo = Todo.find(params[:id])
+    @current_user.todos.find_by(id: params[id])
+    render json: { error: 'Todo not found' }, status: :not_found unless @todo
   end
-  
+
   def todo_params
     params.permit(:body, :is_completed)
   end

@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Todo, type: :model do
-
-  context "valid attributes" do
+  context 'valid attributes' do
     it 'is valid with valid attributes' do
       todo = build(:todo)
       expect(todo).to be_valid
@@ -16,10 +15,10 @@ RSpec.describe Todo, type: :model do
       expect(todo.errors[:body]).to include("can't be blank")
     end
 
-    it "is invalid when body is too long" do
-      todo = build(:todo, body: "a" * 256)
+    it 'is invalid when body is too long' do
+      todo = build(:todo, body: 'a' * 256)
       todo.valid?
-      expect(todo.errors[:body]).to include("is too long (maximum is 255 characters)")
+      expect(todo.errors[:body]).to include('is too long (maximum is 255 characters)')
     end
 
     it 'is invalid without a is_completed' do
